@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector} from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState,useEffect } from 'react'
-function AuthLayout(children,authentication) {
-    const navigate=Navigate()
+function AuthLayout({children,authentication=true}) {
+    const navigate=useNavigate()
     const [loader,setLoader]=useState(true)
     const authstatus=useSelector((state)=>state.auth)
     useEffect(()=>{

@@ -6,13 +6,12 @@ import {login, logout} from "./store/authSlice"
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import { Outlet } from 'react-router-dom'
-
 function App() {
   const [loading, setLoading] = useState(true)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    authService.createAccount("testing1122@gmail.com",'testing123')
+   // authService.createAccount("hello-world@gmail.com",'testing123')
     authService.getCurrentUser()
     .then((userData) => {      
       if (userData) {

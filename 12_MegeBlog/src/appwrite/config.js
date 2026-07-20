@@ -81,15 +81,13 @@ export class dbService{
         }
     }
 
-        async getPosts(queries = [Query.equal("status", "active")]){
+    async getPosts(queries = [Query.equal("status", "active")]){
         try {
-            return await this.databases.listRows(
-                conf.appwriteDatabaseId,
-                conf.appwriteCollectionId,
-                queries,
-                
-
-            )
+            return await this.databases.listRows({
+                databaseId: conf.appwriteDatabaseID,
+                collectionId: conf.appwriteCollectionID,
+                queries: queries
+            })
         } catch (error) {
             console.log("Appwrite serive :: getPosts :: error", error);
             return false
@@ -100,7 +98,7 @@ export class dbService{
 
     async uploadFile(file){
         try {
-            return await this.bucket.createFile(
+            return await this.bucket.updateDocument(
                 conf.appwriteBucketID,
                 ID.unique(),
                 file
@@ -113,7 +111,7 @@ export class dbService{
 
     async deleteFile(fileId){
         try {
-            await this.bucket.deleteFile(
+            await this.bucket.deleteDocument(
                 conf.appwriteBucketId,
                 fileId
             )

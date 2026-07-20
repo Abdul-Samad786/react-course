@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link,Navigate, useNavigate } from "react-router-dom";
-import { dbService} from "../appwrite/config";
 import authService from "../appwrite/auth";
 import { useDispatch } from "react-redux";  
 import {Button,Input,Logo} from './index'

@@ -33,11 +33,11 @@ export class AuthService {
         }
     }
 
-    async login(email,password){
+    async login(user_email,user_password) {
         try {
             const result= await this.account.createEmailPasswordSession({
-            email:email,
-            password: password
+            email:user_email,
+            password: user_password
         });
         return result;
 

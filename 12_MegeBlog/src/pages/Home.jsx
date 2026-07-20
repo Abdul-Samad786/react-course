@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import { dbService } from '../appwrite/config'
+import  {dbService} from '../appwrite/config'
 import {PostCard,Container} from '../components'
 function Home() {
     const [posts,setPosts] = useState([])
     useEffect(()=>{
         const fetchPosts = async()=>{
-            const response = await dbService.getPosts().then((posts)=>{
+            await dbService.getPosts().then((posts)=>{
                 if(posts){
                     setPosts(posts.documents)
                 }
@@ -30,16 +30,15 @@ function Home() {
                 <Container>
                     <div className='flex flex-wrap gap-4'>
                         {posts.map((post) => (
-                            <PostCard key={post.$id} post={post} />
+                            <div key={post.$id} className='p-2 w-1/4'>
+                                <PostCard {...post} />
+                            </div>
                         ))}
                     </div>
                 </Container>
             </div>
         )
     }
-  return (
-    <div>Home</div>
-  )
 }
 
 export default Home

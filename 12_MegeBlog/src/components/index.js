@@ -22,7 +22,6 @@ export{
     Input,
     Signup,
     Login,
-    PostForm,
     RTE,
     Select,
     PostCard,
