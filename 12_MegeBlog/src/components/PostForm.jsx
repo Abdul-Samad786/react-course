@@ -19,40 +19,68 @@ export default function PostForm({ post }) {
     const userData = useSelector((state) => state.auth.userdata);
 
     const submit = async (data) => {
-        console.log("User data is here:",userData);
+        console.log("[PostForm] submit raw form data:", data);
+        console.log("[PostForm] current userData:", userData);
+        console.log("[PostForm] current post:", post);
         
         if (post) {
-            const file = data.image[0] ? await dbService.uploadFile(data.image[0]) : null;
+            console.log("[PostForm] updating existing post");
+            const file = data.image?.[0] ? await dbService.uploadFile(data.image[0]) : null;
+            console.log("[PostForm] uploaded replacement file:", file);
 
             if (file) {
+                console.log("[PostForm] deleting old file:", post.featuredImage);
                 dbService.deleteFile(post.featuredImage);
             }
 
-            const dbPost = await dbService.updatePost(post.$id, {
+            const payload = {
                 ...data,
                 featuredImage: file ? file.$id : undefined,
-            });
+            };
+
+            console.log("[PostForm] update payload:", payload);
+
+            const dbPost = await dbService.updatePost(post.$id, payload);
+            console.log("[PostForm] update response:", dbPost);
 
             if (dbPost) {
                 navigate(`/post/${dbPost.$id}`);
             }
-        } else {
-            if (!userData) {
-                console.warn("No user data available — redirecting to login");
-                navigate("/login");
-                return;
-            }
+        } 
+        else {
+            console.log("[PostForm] creating new post");
+            console.log("[PostForm] title/content/status/slug before upload:", {
+                title: data.title,
+                content: data.content,
+                status: data.status,
+                slug: data.slug,
+            });
 
-            const file = await dbService.uploadFile(data.image[0]);
+            const file = await dbService.uploadFile(data.image?.[0]);
+            console.log("[PostForm] uploaded file:", file);
 
             if (file) {
+                console.log("[PostForm] creating post with file ID:", file.$id);
+                console.log("[PostForm] current userData:", userData);
+                console.log("[PostForm] form data before payload:", data);
+                // console.log("[PostForm] form data after payload:", {
+                //     ...data,
+                //     featuredImage: file.$id,
+                //     userId: userData.$id,
+                // });
                 const fileId = file.$id;
-                data.featuredImage = fileId;
-                const dbPost = await dbService.createPost({ ...data, userId: userData.$id });
+                const payload = { ...data, featuredImage: fileId, userId: userData.$id };
+
+                console.log("[PostForm] create payload:", payload);
+
+                const dbPost = await dbService.createPost(payload);
+                console.log("[PostForm] create response:", dbPost);
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
                 }
+            } else {
+                console.error("[PostForm] file upload failed; post was not created");
             }
         }
     };

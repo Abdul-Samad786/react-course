@@ -83,7 +83,7 @@ class DbService {
 
     async getPosts(queries = [Query.equal("status", "active")]) {
         try {
-            return await this.databases.listRows(
+            return await this.databases.listDocuments(
                 conf.appwriteDatabaseID,
                 conf.appwriteCollectionID,
                 queries

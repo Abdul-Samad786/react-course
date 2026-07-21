@@ -19,7 +19,7 @@ function AllPost() {
             <div className='flex flex-wrap gap-4'>
             {posts.map((post) => (
                 <div key={post.$id} className='w-full md:w-1/2 lg:w-1/3'>
-                <PostCard key={post.$id} post={post} />
+                <PostCard key={post.$id} {...post} />
                 </div>
             ))}
             </div>

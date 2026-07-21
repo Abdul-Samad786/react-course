@@ -1,14 +1,18 @@
 import React,{useState,useEffect} from 'react'
 import PostForm from '../components/PostForm'
 import {useParams,useNavigate} from 'react-router-dom'
+
+import {Container} from '../components'
+import { dbService } from '../appwrite/config'
 function EditPost() {
     const [post,setPost] = useState(null)
     const {slug} = useParams()
     const navigate = useNavigate()
     useEffect(()=>{
+        console.log("[EditPost] slug from params:", slug)
         if(slug){
             const fetchPost = async()=>{
-                const response = await dbService.getPost(slug).then((post)=>{
+                await dbService.getPost(slug).then((post)=>{
                     if(post){
                         setPost(post)
                     }
