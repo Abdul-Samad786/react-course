@@ -14,7 +14,7 @@ const Signup = () => {
     
     const create = async (data) => {
         try {
-            const userData = await authService.createAccount(data)
+            const userData = await authService.createAccount(data.email,data.password)
             if (userData) {
                 const user = await authService.getCurrentUser()
                 if (user) dispatch(login(user))
@@ -40,8 +40,8 @@ const Signup = () => {
                 {error && <p className='text-center text-base text-red-500'>{error}</p>}
                 <form onSubmit={handleSubmit(create)} className='mt-8'>
                     <div className='space-y-5'>
-                        <Input label="Email" type="email" placeholder="Enter your email" {...register("email", { required: true })} />
-                        <Input label="Password" type="password" placeholder="Enter your password" {...register("password", { required: true })} />
+                        <Input label="Email" type="email" autoComplete="email" placeholder="Enter your email" {...register("email", { required: true })} />
+                        <Input label="Password" type="password" autoComplete="current-password" placeholder="Enter your password" {...register("password", { required: true })} />
                         <Button type="submit" variant="primary" className='w-full'>Sign up</Button>
                     </div>
                 </form>

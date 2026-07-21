@@ -9,18 +9,22 @@ function Login() {
     const dispatch=useDispatch()
     const navigate=useNavigate()
     const {register,handleSubmit}=useForm()
-    const {error,setError}=useState("")
+    const [error,setError]=useState("")
 
     const login=async(data)=>{
+        console.log("[Login] submit payload:", data)
         try {
-            const session=authService.login(data)
+            const session=await authService.login(data.email,data.password)
+            console.log("[Login] session result:", session)
             if (session){
-                const userData=authService.getCurrentUser()
+                const userData=await authService.getCurrentUser()
+                console.log("[Login] current user:", userData)
                 if (userData) dispatch(authLogin(userData))
                 navigate("/")
             }
         } catch (error) {
-            setError(error)
+            console.error("[Login] error:", error)
+            setError(error?.message || "Login failed")
         }
     }
   return (
@@ -38,8 +42,8 @@ function Login() {
         {error && <p className='text-center text-base text-red-500'>{error}</p>}
         <form onSubmit={handleSubmit(login)} className='mt-8'>
             <div className='space-y-5'>
-                <Input label="Email" type="email" placeholder="Enter your email" {...register("email",{required:true})} />
-                <Input label="Password" type="password" placeholder="Enter your password" {...register("password",{required:true})} />
+                <Input label="Email" type="email" autoComplete="email" placeholder="Enter your email" {...register("email",{required:true})} />
+                <Input label="Password" type="password" autoComplete="current-password" placeholder="Enter your password" {...register("password",{required:true})} />
                 <Button type="submit" variant="primary" className='w-full'>Sign in</Button>
             </div>
         </form>

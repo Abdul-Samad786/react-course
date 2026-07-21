@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react'
 function AuthLayout({children,authentication=true}) {
     const navigate=useNavigate()
     const [loader,setLoader]=useState(true)
-    const authstatus=useSelector((state)=>state.auth)
+    const authstatus=useSelector((state)=>state.auth.state)
     useEffect(()=>{
         if(authentication && authstatus!=authentication){
             navigate('/login')

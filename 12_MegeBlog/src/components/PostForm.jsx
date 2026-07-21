@@ -16,9 +16,11 @@ export default function PostForm({ post }) {
     });
 
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.auth.userData);
+    const userData = useSelector((state) => state.auth.userdata);
 
     const submit = async (data) => {
+        console.log("User data is here:",userData);
+        
         if (post) {
             const file = data.image[0] ? await dbService.uploadFile(data.image[0]) : null;
 
@@ -35,6 +37,12 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
+            if (!userData) {
+                console.warn("No user data available — redirecting to login");
+                navigate("/login");
+                return;
+            }
+
             const file = await dbService.uploadFile(data.image[0]);
 
             if (file) {
@@ -110,8 +118,9 @@ export default function PostForm({ post }) {
                 <Select
                     options={["active", "inactive"]}
                     label="Status"
+                    value={getValues("status")}
                     className="mb-4"
-                    {...register("status", { required: true })}
+                    {...register("status", {  })}
                 />
                 <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
                     {post ? "Update" : "Submit"}
